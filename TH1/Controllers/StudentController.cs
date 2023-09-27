@@ -64,14 +64,21 @@ namespace TH_01.Controllers
         [HttpPost("Admin/Student/Add")]
         public async Task<IActionResult> Create(Student s)
         {
-            //var file = Path.Combine(env.ContentRootPath, "wwwroot\\upload", s.Image.Name);
-            //using (var filestream = new FileStream(file, FileMode.Create))
-            //{
-            //    await s.Image.CopyToAsync(filestream);
-            //}
+            if (ModelState.IsValid)
+            {
                 s.Id = listStudents.Last<Student>().Id + 1;
-            listStudents.Add(s);
-            return View("Index", listStudents);
+                listStudents.Add(s);
+                return View("Index", listStudents);
+            }
+            ViewBag.AllGenders = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList();
+            ViewBag.AllBranches = new List<SelectListItem>()
+            {
+            new SelectListItem { Text = "IT", Value = "1" },
+            new SelectListItem { Text = "BE", Value = "2" },
+            new SelectListItem { Text = "CE", Value = "3" },
+            new SelectListItem { Text = "EE", Value = "4" }
+            };
+            return View();
         }
     }
 }
